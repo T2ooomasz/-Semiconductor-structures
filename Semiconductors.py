@@ -99,10 +99,10 @@ def main():
 
     perovskite = Perovskite(compound_1=CsSnCl3, compound_2=CsSnI3, resolution=1000)
 
-    perovskite.draw_graphs(bowing=0, save=False)
-    perovskite.draw_graphs(bowing=2, save=False)
-    perovskite.draw_Eg(bowing=0, save=False)
-    perovskite.draw_Eg(bowing=2, save=False)
+    perovskite.draw_graphs(bowing=0, save=True)
+    perovskite.draw_graphs(bowing=2, save=True)
+    perovskite.draw_Eg(bowing=0, save=True)
+    perovskite.draw_Eg(bowing=2, save=True)
 
 
 if __name__ == "__main__":
