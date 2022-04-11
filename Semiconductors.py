@@ -3,13 +3,21 @@ import numpy as np
 from typing import List, Optional, Mapping
 import os
 
+from regex import A
+
 
 class Perovskite:
-    def __init__(self, arg_start: float, arg_stop: float, steps: int):
-        # self.arg_start = arg_start
-        # self.arg_stop = arg_stop
-        # self.steps = steps
-        self.arguments = np.linspace(arg_start, arg_stop, steps)
+    def __init__(
+        self,
+        resolution: int,
+        compound_1: Mapping[str, float],
+        compound_2: Mapping[str, float],
+        arg_start: Optional[float] = 0,
+        arg_stop: Optional[float] = 1,
+    ):
+        self.arguments = np.linspace(arg_start, arg_stop, resolution)
+        self.compound_1 = compound_1
+        self.compound_2 = compound_2
 
     def interpolate(
         self,
@@ -25,20 +33,44 @@ class Perovskite:
 
     def draw_graphs(
         self,
-        compound_1: Mapping[str, float],
-        compound_2: Mapping[str, float],
         bowing: Optional[float] = 0,
+        save: Optional[bool] = True,
     ):
-        for key in compound_1:
-            values = self.interpolate(compound_1[key], compound_2[key], bowing)
+        for key in self.compound_1:
+            values = self.interpolate(
+                self.compound_1[key], self.compound_2[key], bowing
+            )
             plt.plot(self.arguments, values)
-            plt.title(f"{key} in Cs Sn [C_l3x I_3(1-x)]")
+            plt.title(f"{key} in Cs Sn [C_l3x I_3(1-x)], bowing=" + str(bowing))
             plt.ylabel(key)
             plt.xlabel("x")
+            if save:
+                if not os.path.isdir("graphs"):
+                    os.makedirs("graphs")
+                plt.savefig(str(f"graphs/bowing_{str(bowing)}_{str(key)}.png"))
+            else:
+                plt.show()
+            plt.clf()
+
+    def draw_Eg(
+        self,
+        bowing: Optional[float] = 0,
+        save: Optional[bool] = True,
+    ):
+
+        Eg = self.interpolate(self.compound_1["Eg"], self.compound_2["Eg"], bowing)
+        a = self.interpolate(self.compound_1["a"], self.compound_2["a"], bowing)
+        plt.plot(a, Eg)
+        plt.title("Eg(a) in Cs Sn [C_l3x I_3(1-x)], bowing=" + str(bowing))
+        plt.ylabel("Eg")
+        plt.xlabel("a")
+        if save:
             if not os.path.isdir("graphs"):
                 os.makedirs("graphs")
-            plt.savefig(str(f"graphs/bowing_{str(bowing)}_{str(key)}.png"))
-            plt.clf()
+            plt.savefig(str(f"graphs/Eg_a_bowing_{str(bowing)}.png"))
+        else:
+            plt.show()
+        plt.clf()
 
 
 def main():
@@ -65,9 +97,12 @@ def main():
         "a": 6.219,
     }
 
-    perovskite = Perovskite(0, 1, 1000)
-    perovskite.draw_graphs(CsSnCl3, CsSnI3, bowing=0)
-    perovskite.draw_graphs(CsSnCl3, CsSnI3, bowing=2)
+    perovskite = Perovskite(compound_1=CsSnCl3, compound_2=CsSnI3, resolution=1000)
+
+    perovskite.draw_graphs(bowing=0, save=False)
+    perovskite.draw_graphs(bowing=2, save=False)
+    perovskite.draw_Eg(bowing=0, save=False)
+    perovskite.draw_Eg(bowing=2, save=False)
 
 
 if __name__ == "__main__":
