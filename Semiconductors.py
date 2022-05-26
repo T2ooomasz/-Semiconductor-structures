@@ -69,9 +69,10 @@ class Perovskite:
         Eg = self.interpolate(self.compound_1["Eg"], self.compound_2["Eg"], bowing)
         a = self.interpolate(self.compound_1["a"], self.compound_2["a"], bowing)
         plt.plot(a, Eg)
-        plt.title("Eg(a) in Cs Sn [C_l3x I_3(1-x)], bowing=" + str(bowing))
+        plt.title("Eg(a)      CsSn [C_l3x I_3(1-x)], bowing=" + str(bowing))
         plt.ylabel("Eg")
         plt.xlabel("a")
+        plt.grid()
         if save:
             if not os.path.isdir("graphs"):
                 os.makedirs("graphs")
@@ -88,14 +89,15 @@ class Perovskite:
     ) -> None:
 
         plt.plot(temperatures, Eg_temp)
-        plt.title("Eg(T), Cs Sn [C_l3x I_3(1-x)] for x=0.5")
+        plt.title("Eg(T)      CsSn [C_l3x I_3(1-x)] for x=0.35")
         plt.ylabel("Eg [eV]")
         plt.xlabel("T [K]")
+        plt.grid()
 
         if save:
             if not os.path.isdir("graphs2"):
                 os.makedirs("graphs2")
-            plt.savefig(str(f"graphs2/Eg_as_a_function_of_T_x_0,5.png"))
+            plt.savefig(str(f"graphs2/Eg_as_a_function_of_T_x_0,35.png"))
         else:
             plt.show()
         plt.clf()
@@ -129,7 +131,7 @@ class Perovskite:
         temp_start: Optional[int] = 250,
         temp_stop: Optional[int] = 350,
         resolution: Optional[int] = 1000,
-        mix_parameter: Optional[float] = 0.5,
+        mix_parameter: Optional[float] = 0.35,
         save: Optional[bool] = True,
     ) -> None:
 
@@ -141,26 +143,27 @@ class Perovskite:
 
         VB = self.bands_calculate_VB(Eg_temp, mixed_params)
         plt.plot(temperatures, VB, label="VB", alpha=0.7)
-        plt.title("bands(T), Cs Sn [C_l3x I_3(1-x)] for x=0.5")
+        plt.title("bands(T)        CsSn [C_l3x I_3(1-x)] for x=0.35")
         plt.ylabel("E [eV]")
         plt.xlabel("T [K]")
 
         CH = self.bands_calculate_CH(Eg_temp, mixed_params)
-        plt.plot(temperatures, CH, label="CH", alpha=1, linewidth=2.0)
+        plt.plot(temperatures, CH, label="CH", alpha=1, linewidth=2.0, color='purple')
 
         CL = self.bands_calculate_CH(Eg_temp, mixed_params)
         plt.plot(
-            temperatures, CL, label="CL", alpha=1, linewidth=1.5, linestyle="dashed"
+            temperatures, CL, label="CL", alpha=1, linewidth=1.5, linestyle="dashed", color='yellow'
         )
 
         CS = self.bands_calculate_CS(Eg_temp, mixed_params)
         plt.plot(temperatures, CS, label="CS", alpha=1, linewidth=1.5, linestyle="-")
 
         plt.legend()
+        plt.grid()
         if save:
             if not os.path.isdir("graphs2"):
                 os.makedirs("graphs2")
-            plt.savefig(str(f"graphs2/bands_x_0,5.png"))
+            plt.savefig(str(f"graphs2/bands_x_0,35.png"))
             plt.show()
         else:
             plt.show()
