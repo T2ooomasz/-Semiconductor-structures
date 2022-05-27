@@ -181,11 +181,14 @@ class Perovskite:
         }
         return mixed_params
 
-    # parameters: 
+    '''
+    parameters: 
+    return: energy of valance band (E_VB) depended on temperature
+    '''
     def bands_calculate_VB(
         self, Eg_temp: List[float], param: Dict[str, float]
     ) -> List[float]:
-
+        k_x, k_y, k_z = 1, 1, 0
         return [
             Eg
             + (
@@ -197,7 +200,7 @@ class Perovskite:
                     1 / param["mh"]
                     - param["Ep"] / 3 * (2 / Eg + 1 / (Eg + param["delta"]))
                 )
-                * 2
+                * (k_x**2 + k_y**2 + k_z**2)
             )
             for Eg in Eg_temp
         ]
