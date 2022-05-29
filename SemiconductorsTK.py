@@ -10,7 +10,7 @@ from CsSnCl3 import CsSnCl3
 from CsSnI3 import CsSnI3
 
 from Zadanie2 import Zadanie2
-from Perovskite_With_Temperature import Perovskite_With_Temperature as Perovskite_wT
+from Perovskite_With_Temperature import Perivskite_With_Temperature as Perovskite_wT
 
 
 def main():
@@ -28,7 +28,7 @@ def main():
         perovskite1.E_CL_with_temperature,
         perovskite1.E_CS_with_temperature)
         
-    perovskite1.draw_bands(temp_start=150, temp_stop=350)
+    perovskite1.draw_bands(temp_start=200, temp_stop=300)
     
     
 
