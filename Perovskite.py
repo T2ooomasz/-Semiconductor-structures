@@ -4,8 +4,8 @@ from Interpolate import Interpolate as I
 class Perovskite:
     '''
     initialize Perovskite class which contain:
-        compount_1 (first 'zwiazek' e.q. CsSnCl_3)
-        compount_2 (second 'związek' e.g. CsSnI_3)
+        compount_1 (first compound e.q. CsSnCl_3)
+        compount_2 (second compound e.g. CsSnI_3)
     and parameters for creation of Perovskite: 
     [parameter_1 * x + parameter_2 * (1 - x) + bowing * (1 - x) * x + constant]
         mix_proportion (=x)  (proportion betwen compounds)
@@ -37,7 +37,7 @@ class Perovskite:
     return: interpolated param1 with param2 with weight coresponded to arguments 
     EX: param1 = 1, param2 = 2, arguments = [0, 0.3, 0.6. 1]
         return [param1*0+param2*(1-0), param1*0.3+param2*(1-0.3), ...]
-    '''
+    
     def interpolate(
         self,
         parameter_1: float,
@@ -51,6 +51,7 @@ class Perovskite:
             parameter_1 * x + parameter_2 * (1 - x) + bowing * (1 - x) * x + constant
             for x in arguments
         ]
+    '''
 
     '''
     take: proportion of parameters
