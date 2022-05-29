@@ -30,6 +30,11 @@ class Perovskite:
         self.bowing = bowing
         self.constant = constant
         self.H_REDUCED = 6.582119569  # [eV]
+        '''
+        perovskite in class Perovskite (perovskite.perovskite) 
+        is the mix of all parameters in components of perovskite
+        with set mix proportion and bowing (if wanted)
+        '''
         self.perovskite = self.calculate_mixed_params(self.mix_proportion)
 
     '''
