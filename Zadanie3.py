@@ -9,6 +9,11 @@ from Interpolate import Interpolate as I
 class Zadanie3:
     '''
     Zadanie 3 - dependency on Temperature
+
+    WHAT IS WRONG:
+        when calculated from list of temperatures results are different for the same temperature if list range is different
+        (Ex: temperatures=[150-300] Eg[temp=250]=1.78 || temperatures=[249-251] Eg[temp250]=1.83)
+        calculation for list with lenght=1 crash (espetially for CL band)
     '''
     def __init__(
         self,
@@ -18,7 +23,6 @@ class Zadanie3:
         bowing: Optional[Union[float, bool]] = None,
     ):
         self.perovskite = perovskite
-        self.with_temperature =  self.perovskite.perovskite['Eg'] + temperature * self.perovskite.perovskite["alpha"] 
         self.resolution = resolution
         self.temperature = temperature
         if bowing == None:
@@ -27,27 +31,12 @@ class Zadanie3:
             self.bowing = bowing
         self.arguments = np.linspace(0,1,num=resolution)
         self.H_REDUCED = perovskite.H_REDUCED  # [eV]
-
-    def calculate_Eg_temp(
-            self,
-            temperatures: List[float],
-            mixed_params: Dict[str, float],
-        ) -> List[float]:
-
-            Eg_0 = (
-                self.perovskite.perovskite['Eg'] + temperatures[0]* mixed_params["alpha"] 
-            )
-
-            Eg_T = I.interpolate(
-                parameter_1=mixed_params["alpha"],
-                constant=Eg_0,
-                arguments=temperatures,
-                parameter_2=0,
-                bowing=0,
-            )
-
-            return Eg_T
-
+        self.Eg_with_temperature = self.calculate_Eg_temp([self.temperature], self.perovskite.perovskite)[0]
+        self.E_VB_with_temperature = self.bands_calculate_VB([self.Eg_with_temperature], self.perovskite.perovskite)[0]
+        self.E_CH_with_temperature = self.bands_calculate_CH([self.Eg_with_temperature], self.perovskite.perovskite)[0]
+        self.E_CL_with_temperature = self.bands_calculate_CL([self.Eg_with_temperature], self.perovskite.perovskite)[0]
+        self.E_CS_with_temperature = self.bands_calculate_CS([self.Eg_with_temperature], self.perovskite.perovskite)[0]
+    
     '''
     Methods to draw dependency on temperature
     '''
@@ -72,7 +61,38 @@ class Zadanie3:
             plt.show()
         plt.clf()
 
-    
+    '''
+    calculate Eg for perovskite in set temperature (or list of temperatures)
+    take: list of temperaturs, mixed_parameters of perovskite (perovskite.perovskite)
+    return: Eg for every temperature
+    '''
+    def calculate_Eg_temp(
+            self,
+            temperatures: List[float],
+            mixed_params: Dict[str, float],
+        ) -> List[float]:
+
+            Eg_0 = (
+                self.perovskite.perovskite['Eg'] + temperatures[0]* mixed_params["alpha"] 
+            )
+
+            Eg_T = I.interpolate(
+                parameter_1=mixed_params["alpha"],
+                constant=Eg_0,
+                arguments=temperatures,
+                parameter_2=0,
+                bowing=0,
+            )
+
+            return Eg_T
+
+    '''
+    Plot values of bands in range of temperaturs
+    take: temperature for start and stop, resolution, save
+    return: plots of:
+            Eg dependend on temperatur
+            bands VB, CH, CL, CS dependend on temerature
+    '''
     def draw_bands(
         self,
         temp_start: Optional[int] = 250,
@@ -81,9 +101,10 @@ class Zadanie3:
         save: Optional[bool] = True,
     ) -> None:
 
-        mix_parameter = self.perovskite.mix_proportion
+        #mix_parameter = self.perovskite.mix_proportion
         mixed_params = self.perovskite.perovskite
-        temperatures = np.linspace(temp_start, temp_stop, resolution, mix_parameter)
+        #temperatures = np.linspace(temp_start, temp_stop, resolution, mix_parameter)
+        temperatures = np.linspace(temp_start, temp_stop, resolution)
         Eg_temp = self.calculate_Eg_temp(temperatures, mixed_params)
 
         self.draw_Eg_temp(temperatures, Eg_temp)
@@ -116,6 +137,11 @@ class Zadanie3:
             plt.show()
         plt.clf()
 
+    '''
+    calculate value of band VB
+    take: list of Eg (to calculate VB for every Eg), mixed parameters (perovskite)
+    return: values of band VB for every Eg
+    '''
     def bands_calculate_VB(
         self, Eg_temp: List[float], param: Dict[str, float]
     ) -> List[float]:
@@ -135,6 +161,11 @@ class Zadanie3:
             for Eg in Eg_temp
         ]
 
+    '''
+    calculate value of band CH
+    take: list of Eg (to calculate CH for every Eg), mixed parameters (perovskite)
+    return: values of band CH for every Eg
+    '''
     def bands_calculate_CH(
         self, Eg_temp: List[float], param: Dict[str, float]
     ) -> List[float]:
@@ -153,6 +184,11 @@ class Zadanie3:
             for Eg in Eg_temp
         ]
 
+    '''
+    calculate value of band CL
+    take: list of Eg (to calculate CL for every Eg), mixed parameters (perovskite)
+    return: values of band CL for every Eg
+    '''
     def bands_calculate_CL(
         self, Eg_temp: List[float], param: Dict[str, float]
     ) -> List[float]:
@@ -171,6 +207,11 @@ class Zadanie3:
             for Eg in Eg_temp
         ]
 
+    '''
+    calculate value of band CS
+    take: list of Eg (to calculate CS for every Eg), mixed parameters (perovskite)
+    return: values of band CS for every Eg
+    '''
     def bands_calculate_CS(
         self, Eg_temp: List[float], param: Dict[str, float]
     ) -> List[float]:
