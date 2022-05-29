@@ -11,11 +11,6 @@ class Perivskite_With_Temperature:
     '''
     Zadanie 3 - dependency on Temperature
     contain variables of bonds in wanted temperature
-
-    WHAT IS WRONG:
-        when calculated from list of temperatures results are different for the same temperature if list range is different
-        (Ex: temperatures=[150-300] Eg[temp=250]=1.78 || temperatures=[249-251] Eg[temp250]=1.83)
-        calculation for list with lenght=1 crash (espetially for CL band)
     '''
     def __init__(
         self,
@@ -74,13 +69,9 @@ class Perivskite_With_Temperature:
             mixed_params: Dict[str, float],
         ) -> List[float]:
 
-            Eg_0 = (
-                self.perovskite.perovskite['Eg'] + temperatures[0]* mixed_params["alpha"] 
-            )
-
             Eg_T = I.interpolate(
                 parameter_1=mixed_params["alpha"],
-                constant=Eg_0,
+                constant=self.perovskite.perovskite['Eg'],
                 arguments=temperatures,
                 parameter_2=0,
                 bowing=0,
@@ -120,7 +111,7 @@ class Perivskite_With_Temperature:
         CH = self.bands_calculate_CH(Eg_temp, mixed_params)
         plt.plot(temperatures, CH, label="CH", alpha=1, linewidth=2.0, color='purple')
 
-        CL = self.bands_calculate_CH(Eg_temp, mixed_params)
+        CL = self.bands_calculate_CL(Eg_temp, mixed_params)
         plt.plot(
             temperatures, CL, label="CL", alpha=1, linewidth=1.5, linestyle="dashed", color='yellow'
         )
