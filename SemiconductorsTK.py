@@ -21,8 +21,13 @@ def main():
     perovskite = Perovskite(compound_1=compound_1, compound_2=compound_2,  mix_proportion=mix_proportion)
 
     perovskite1 = Zadanie3(perovskite=perovskite, temperature=250)
-    print(perovskite1.with_temperature)
-    perovskite1.draw_bands(temp_start=0, temp_stop=400)
+    print(
+        perovskite1.Eg_with_temperature,
+        perovskite1.E_VB_with_temperature,
+        perovskite1.E_CH_with_temperature,
+        perovskite1.E_CL_with_temperature,
+        perovskite1.E_CS_with_temperature)
+    perovskite1.draw_bands(temp_start=150, temp_stop=350)
     
     
 
