@@ -38,27 +38,6 @@ class Perovskite:
         self.perovskite = self.calculate_mixed_params(self.mix_proportion)
 
     '''
-    take: param1, param2, arguments, optional: bowing, constant
-    return: interpolated param1 with param2 with weight coresponded to arguments 
-    EX: param1 = 1, param2 = 2, arguments = [0, 0.3, 0.6. 1]
-        return [param1*0+param2*(1-0), param1*0.3+param2*(1-0.3), ...]
-    
-    def interpolate(
-        self,
-        parameter_1: float,
-        parameter_2: float,
-        arguments: Union[List[float], bool] = None,
-        bowing: Optional[float] = 0,
-        constant: Optional[float] = 0,
-    ) -> List[float]:
-
-        return [
-            parameter_1 * x + parameter_2 * (1 - x) + bowing * (1 - x) * x + constant
-            for x in arguments
-        ]
-    '''
-
-    '''
     take: proportion of parameters
     return: mixed parameters with proportion taken
     EX: mix_parameter = 0.35

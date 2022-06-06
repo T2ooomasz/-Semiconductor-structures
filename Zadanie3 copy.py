@@ -3,33 +3,36 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-from Perovskite import Perovskite 
+from Perovskite_With_Temperature import Perivskite_With_Temperature as Perovskite
 from Interpolate import Interpolate as I
 
 # want to make it child of Perovskite class - can be initializated separatly
-class Perovskite_With_Temperature(Perovskite):
+class Zadanie3:
     '''
     Zadanie 3 - dependency on Temperature
     contain variables of bonds in wanted temperature
     '''
     def __init__(
         self,
-        compound_1: Mapping[str, float],
-        compound_2: Mapping[str, float],
-
-        # parameters for calculation perovskite
-        mix_proportion: Optional[float] = 0.5,
-        constant: Optional[float] = 0,
+        perovskite: Perovskite,
+        resolution: Optional[int] = 1000,
         temperature: Optional[float] = 0,
-        bowing: Optional[float] = 0,
+        bowing: Optional[Union[float, bool]] = None,
     ):
-        super().__init__(compound_1=compound_1, compound_2=compound_2, mix_proportion=mix_proportion, bowing=bowing, constant=constant)
+        self.perovskite = perovskite
+        self.resolution = resolution
         self.temperature = temperature
-        self.Eg_with_temperature = self.calculate_Eg_temp([self.temperature], self.perovskite)[0]
-        self.E_VB_with_temperature = self.bands_calculate_VB([self.Eg_with_temperature], self.perovskite)[0]
-        self.E_CH_with_temperature = self.bands_calculate_CH([self.Eg_with_temperature], self.perovskite)[0]
-        self.E_CL_with_temperature = self.bands_calculate_CL([self.Eg_with_temperature], self.perovskite)[0]
-        self.E_CS_with_temperature = self.bands_calculate_CS([self.Eg_with_temperature], self.perovskite)[0]
+        if bowing == None:
+            self.bowing = self.perovskite.bowing
+        else:
+            self.bowing = bowing
+        self.arguments = np.linspace(0,1,num=resolution)
+        self.H_REDUCED = perovskite.H_REDUCED  # [eV]
+        self.Eg_with_temperature = self.calculate_Eg_temp([self.temperature], self.perovskite.perovskite)[0]
+        self.E_VB_with_temperature = self.bands_calculate_VB([self.Eg_with_temperature], self.perovskite.perovskite)[0]
+        self.E_CH_with_temperature = self.bands_calculate_CH([self.Eg_with_temperature], self.perovskite.perovskite)[0]
+        self.E_CL_with_temperature = self.bands_calculate_CL([self.Eg_with_temperature], self.perovskite.perovskite)[0]
+        self.E_CS_with_temperature = self.bands_calculate_CS([self.Eg_with_temperature], self.perovskite.perovskite)[0]
     
     '''
     Methods to draw dependency on temperature
@@ -68,7 +71,7 @@ class Perovskite_With_Temperature(Perovskite):
 
             Eg_T = I.interpolate(
                 parameter_1=mixed_params["alpha"],
-                constant=self.perovskite['Eg'],
+                constant=self.perovskite.perovskite['Eg'],
                 arguments=temperatures,
                 parameter_2=0,
                 bowing=0,
@@ -92,7 +95,7 @@ class Perovskite_With_Temperature(Perovskite):
     ) -> None:
 
         #mix_parameter = self.perovskite.mix_proportion
-        mixed_params = self.perovskite
+        mixed_params = self.perovskite.perovskite
         #temperatures = np.linspace(temp_start, temp_stop, resolution, mix_parameter)
         temperatures = np.linspace(temp_start, temp_stop, resolution)
         Eg_temp = self.calculate_Eg_temp(temperatures, mixed_params)
@@ -212,4 +215,3 @@ class Perovskite_With_Temperature(Perovskite):
             * ((param["gamma_1"] - 1 / 3 * (param["Ep"] / Eg)) * 2 - param["delta"])
             for Eg in Eg_temp
         ]
-
