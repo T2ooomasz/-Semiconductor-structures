@@ -21,10 +21,10 @@ class Energetic_profile:
         self.tensions = tensions
         # Pasma w punkcie (poki co R)
         self.VBO_perovskite = 1 # normalization
-        self.CS_0 = self.VBO_perovskite + self.perovskite.perovskite["Eg"] 
-        self.CH_0 = self.VBO_perovskite + self.perovskite.perovskite["Eg"] + self.perovskite.perovskite["delta"]
+        self.CS_0 = self.VBO_perovskite + self.perovskite.Eg_with_temperature
+        self.CH_0 = self.VBO_perovskite + self.perovskite.Eg_with_temperature + self.perovskite.perovskite["delta"]
         self.CL_0 = self.CH_0 
-        self.CS_A = self.VBO_perovskite + self.perovskite.perovskite["Eg"] + 3 # CS band for syntetic material
+        self.CS_A = self.VBO_perovskite + self.perovskite.Eg_with_temperature + 3 # CS band for syntetic material
 
     '''
     Take: self

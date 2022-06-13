@@ -26,7 +26,7 @@ class Hamiltonian:
                       [-Is6*P_plus, -s2/s3*P_z,     -Rc,            0,              CL,             -S,             -s3/s2*Sc,      D           ],
                       [0,           -Is2*P_plus,    0,              -Rc,            -Sc,            CH,             s2*Rc,          Is2*Sc      ],
                       [-Is3*P_z,    -Is3*P_minus,   Is2*Sc,         -D,             -s3/s2*S,       s2*R,           CS,             0           ],
-                      [-Is3*P_plus, Is3*P_z,        -s2*Rc,         -s3/s2*Sc,      D,              Is2*S,          0,              CS          ]])
+                      [-Is3*P_plus, Is3*P_z,        -s2*Rc,         -s3/s2*S,      D,              Is2*S,          0,              CS          ]])
 
         w,v =  np.linalg.eig(H)
         idx = w.argsort() #small to large
@@ -55,10 +55,10 @@ class Hamiltonian:
         Energetic_p = Energetic_profile(perovskite=perovskite)
         Table = Energetic_p.return_bands(tension=tension)
         
-        gamma1 = perovskite.perovskite["gamma_1"] - 1/3 * perovskite.perovskite["Ep"]/perovskite.perovskite["Eg"]
-        gamma2 = perovskite.perovskite["gamma_2"] - 1/6 * perovskite.perovskite["Ep"]/perovskite.perovskite["Eg"]
-        gamma3 = perovskite.perovskite["gamma_3"] - 1/6 * perovskite.perovskite["Ep"]/perovskite.perovskite["Eg"]
-        gammav = 1 / perovskite.perovskite["mh"] - perovskite.perovskite["Ep"]/3 * (2 / perovskite.perovskite["Eg"] + 1 / (perovskite.perovskite["Eg"] + perovskite.perovskite["delta"]))
+        gamma1 = perovskite.perovskite["gamma_1"] - 1/3 * perovskite.perovskite["Ep"]/perovskite.Eg_with_temperature
+        gamma2 = perovskite.perovskite["gamma_2"] - 1/6 * perovskite.perovskite["Ep"]/perovskite.Eg_with_temperature
+        gamma3 = perovskite.perovskite["gamma_3"] - 1/6 * perovskite.perovskite["Ep"]/perovskite.Eg_with_temperature
+        gammav = 1 / perovskite.perovskite["mh"] - perovskite.perovskite["Ep"]/3 * (2 / perovskite.Eg_with_temperature + 1 / (perovskite.Eg_with_temperature + perovskite.perovskite["delta"]))
 
         P = np.sqrt(perovskite.perovskite["Ep"] * self.H_REDUCED**2 / (2*self.m0))
         VB, CS, CH, CL, P_plus, P_minus, P_z, S, R, D = self.update_for_k(E_VB=Table[0],E_CS=Table[1],E_CH=Table[2],E_CL=Table[3],k=k, P=P, gammav=gammav, gamma1=gamma1, gamma2=gamma2, gamma3=gamma3)

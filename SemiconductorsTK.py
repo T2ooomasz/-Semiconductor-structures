@@ -19,13 +19,14 @@ from Zadanie5 import grapgh_for_gif
 def main():
     compound_1 = CsSnCl3.CsSnCl3
     compound_2 = CsSnI3.CsSnI3
-    MIX_PROPORTION = np.arange(start=0, stop=1, step=0.025) 
-    TEMPERATURES = np.arange(start=0, stop=100, step=100)
-    BOWING = np.arange(start=-0.5, stop=0.5, step=0.01)
-    TENSION = np.arange(start=-3,stop=3, step=0.3)
+    MIX_PROPORTION = np.arange(start=0, stop=1, step=0.01) 
+    TEMPERATURES = np.arange(start=0, stop=500, step=15)
+    BOWING = np.arange(start=-0.1, stop=0.1, step=0.0005)
+    TENSION = np.arange(start=-6,stop=6, step=0.1)
 
     gif = grapgh_for_gif()
-    
+
+
     gif.gif_with_mix_proportion(
         compound_1=compound_1,
         compound_2=compound_2,
@@ -34,9 +35,10 @@ def main():
         bowing=0,
         tension=0,
         resolution=0.1,
-        percent_range=15,
+        percent_range=100,
     )
 
+    '''
     gif.gif_with_temperature(
         compound_1=compound_1,
         compound_2=compound_2,
@@ -47,7 +49,8 @@ def main():
         resolution=0.1,
         percent_range=15,
     )
-
+    '''
+    '''
     gif.gif_with_bowing(
         compound_1=compound_1,
         compound_2=compound_2,
@@ -58,6 +61,7 @@ def main():
         resolution=0.1,
         percent_range=15,
     )
+
     gif.gif_with_tensin(
         compound_1=compound_1,
         compound_2=compound_2,
@@ -68,7 +72,8 @@ def main():
         resolution=0.1,
         percent_range=15,
     )
-    
+    '''
+
     
 
 
