@@ -421,7 +421,7 @@ def main():
 
     parameters = {
         "bowing": 0.95,
-        "x": 0.65,
+        "x": 0.5,
         "T": 300,
         "VBO_A": 0,
         "E_VB_A": 0,
@@ -433,8 +433,6 @@ def main():
     )
 
     perovskite.plot_energetic_profiles(0)
-    perovskite.plot_energetic_profiles(-3)
-    perovskite.plot_energetic_profiles(3)
 
 
 if __name__ == "__main__":
