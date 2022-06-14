@@ -20,13 +20,13 @@ class Hamiltonian:
         Rc = np.conj(R)
 
         H = np.array([[VB,          0,              Is2*P_plus,     -s2/s3*P_z,     -Is6*P_minus,   0,              -Is3*P_z,       -Is3*P_minus],
-                      [0,           VB,             0,              Is6*P_minus,     -s2/s3*P_z,     -Is2*P_minus,   -Is3*P_plus,    Is3*P_z    ],
+                      [0,           VB,             0,              Is6*P_plus,     -s2/s3*P_z,     -Is2*P_minus,   -Is3*P_plus,    Is3*P_z     ],
                       [Is2*P_minus, 0,              CH,             S,              -R,             0,              Is2*S,          -s2*R       ],
                       [-s2/s3*P_z,  -Is6*P_minus,   Sc,             CL,             0,              -R,             -D,             s3/s2*S     ],
                       [-Is6*P_plus, -s2/s3*P_z,     -Rc,            0,              CL,             -S,             -s3/s2*Sc,      D           ],
                       [0,           -Is2*P_plus,    0,              -Rc,            -Sc,            CH,             s2*Rc,          Is2*Sc      ],
                       [-Is3*P_z,    -Is3*P_minus,   Is2*Sc,         -D,             -s3/s2*S,       s2*R,           CS,             0           ],
-                      [-Is3*P_plus, Is3*P_z,        -s2*Rc,         -s3/s2*S,      D,              Is2*S,          0,              CS          ]])
+                      [-Is3*P_plus, Is3*P_z,        -s2*Rc,         -s3/s2*S,       D,              Is2*S,          0,              CS          ]])
 
         w,v =  np.linalg.eig(H)
         idx = w.argsort() #small to large
@@ -63,8 +63,8 @@ class Hamiltonian:
         P = np.sqrt(perovskite.perovskite["Ep"] * self.H_REDUCED**2 / (2*self.m0))
         VB, CS, CH, CL, P_plus, P_minus, P_z, S, R, D = self.update_for_k(E_VB=Table[0],E_CS=Table[1],E_CH=Table[2],E_CL=Table[3],k=k, P=P, gammav=gammav, gamma1=gamma1, gamma2=gamma2, gamma3=gamma3)
         #eigenvalues from hamiltonian
-        eigenvectors = self.Ham(VB=VB, CH=CH, CL=CL, CS=CS, P_plus=P_plus, P_minus=P_minus, P_z=P_z, S=S, R=R, D=D)
-        return eigenvectors.real
+        eigenvalues = self.Ham(VB=VB, CH=CH, CL=CL, CS=CS, P_plus=P_plus, P_minus=P_minus, P_z=P_z, S=S, R=R, D=D)
+        return eigenvalues.real
 
     def spectrum_eigenvalues(self, perovskite: Perovskite, step, percent_range, tension, name):
         A = []

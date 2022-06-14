@@ -35,10 +35,10 @@ def main():
         bowing=0,
         tension=0,
         resolution=0.1,
-        percent_range=100,
+        percent_range=15,
     )
 
-    '''
+    
     gif.gif_with_temperature(
         compound_1=compound_1,
         compound_2=compound_2,
@@ -49,7 +49,7 @@ def main():
         resolution=0.1,
         percent_range=15,
     )
-    '''
+    
     '''
     gif.gif_with_bowing(
         compound_1=compound_1,
@@ -61,7 +61,7 @@ def main():
         resolution=0.1,
         percent_range=15,
     )
-
+    '''
     gif.gif_with_tensin(
         compound_1=compound_1,
         compound_2=compound_2,
@@ -72,7 +72,7 @@ def main():
         resolution=0.1,
         percent_range=15,
     )
-    '''
+
 
     
 
