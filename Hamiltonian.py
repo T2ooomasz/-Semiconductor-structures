@@ -22,11 +22,11 @@ class Hamiltonian:
         H = np.array([[VB,          0,              Is2*P_plus,     -s2/s3*P_z,     -Is6*P_minus,   0,              -Is3*P_z,       -Is3*P_minus],
                       [0,           VB,             0,              Is6*P_plus,     -s2/s3*P_z,     -Is2*P_minus,   -Is3*P_plus,    Is3*P_z     ],
                       [Is2*P_minus, 0,              CH,             S,              -R,             0,              Is2*S,          -s2*R       ],
-                      [-s2/s3*P_z,  -Is6*P_minus,   Sc,             CL,             0,              -R,             -D,             s3/s2*S     ],
+                      [-s2/s3*P_z,  Is6*P_minus,   Sc,             CL,             0,              -R,             -D,             -s3/s2*S     ],
                       [-Is6*P_plus, -s2/s3*P_z,     -Rc,            0,              CL,             -S,             -s3/s2*Sc,      D           ],
                       [0,           -Is2*P_plus,    0,              -Rc,            -Sc,            CH,             s2*Rc,          Is2*Sc      ],
                       [-Is3*P_z,    -Is3*P_minus,   Is2*Sc,         -D,             -s3/s2*S,       s2*R,           CS,             0           ],
-                      [-Is3*P_plus, Is3*P_z,        -s2*Rc,         -s3/s2*S,       D,              Is2*S,          0,              CS          ]])
+                      [-Is3*P_plus, Is3*P_z,        -s2*Rc,         -s3/s2*Sc,       D,              Is2*S,          0,              CS          ]])
 
         w,v =  np.linalg.eig(H)
         idx = w.argsort() #small to large
