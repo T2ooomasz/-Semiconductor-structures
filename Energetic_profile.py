@@ -20,7 +20,7 @@ class Energetic_profile:
         self.b = b
         self.tensions = tensions
         # Pasma w punkcie (poki co R)
-        self.VBO_perovskite = 0 # normalization before 1
+        self.VBO_perovskite = 0 # normalization before: 1
         self.CS_0 = self.VBO_perovskite + self.perovskite.Eg_with_temperature
         self.CH_0 = self.VBO_perovskite + self.perovskite.Eg_with_temperature + self.perovskite.perovskite["delta"]
         self.CL_0 = self.CH_0 
@@ -48,7 +48,7 @@ class Energetic_profile:
             VBO_A = A.A["VBO"]
             #print(self.perovskite.perovskite["a"])
 
-            return [self.VBO_perovskite, E_CS, E_CH, E_CL, self.perovskite.perovskite["a"], tension*100]
+            return [E_VB, E_CS, E_CH, E_CL, self.perovskite.perovskite["a"], tension*100]
 
 
     '''

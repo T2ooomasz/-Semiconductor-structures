@@ -22,11 +22,11 @@ class Hamiltonian:
         H = np.array([[VB,          0,              Is2*P_plus,     -s2/s3*P_z,     -Is6*P_minus,   0,              -Is3*P_z,       -Is3*P_minus],
                       [0,           VB,             0,              Is6*P_plus,     -s2/s3*P_z,     -Is2*P_minus,   -Is3*P_plus,    Is3*P_z     ],
                       [Is2*P_minus, 0,              CH,             S,              -R,             0,              Is2*S,          -s2*R       ],
-                      [-s2/s3*P_z,  Is6*P_minus,   Sc,             CL,             0,              -R,             -D,             -s3/s2*S     ],
+                      [-s2/s3*P_z,  Is6*P_minus,    Sc,             CL,             0,              -R,             -D,             -s3/s2*S    ],
                       [-Is6*P_plus, -s2/s3*P_z,     -Rc,            0,              CL,             -S,             -s3/s2*Sc,      D           ],
                       [0,           -Is2*P_plus,    0,              -Rc,            -Sc,            CH,             s2*Rc,          Is2*Sc      ],
                       [-Is3*P_z,    -Is3*P_minus,   Is2*Sc,         -D,             -s3/s2*S,       s2*R,           CS,             0           ],
-                      [-Is3*P_plus, Is3*P_z,        -s2*Rc,         -s3/s2*Sc,       D,              Is2*S,          0,              CS          ]])
+                      [-Is3*P_plus, Is3*P_z,        -s2*Rc,         -s3/s2*Sc,      D,              Is2*S,          0,              CS          ]])
 
         w,v =  np.linalg.eig(H)
         idx = w.argsort() #small to large
@@ -37,8 +37,8 @@ class Hamiltonian:
         return w
 
     def update_for_k(self, E_VB, E_CS, E_CH, E_CL, k, P, gammav, gamma1, gamma2, gamma3):
-        P_plus = P * (k[0] + 1j*k[2])
-        P_minus = P * (k[0] - 1j*k[2])
+        P_plus = P * (k[0] + 1j*k[1])
+        P_minus = P * (k[0] - 1j*k[1])
         P_z = P * k[2]
 
         VB = E_VB - self.H_REDUCED**2 / (2 * self.m0) * gammav * (k[0]**2 + k[1]**2 + k[2]**2)
@@ -47,7 +47,7 @@ class Hamiltonian:
         CL = E_CL + self.H_REDUCED**2 / (2 * self.m0) *((gamma1-gamma2) * (k[0]**2 + k[1]**2) + (gamma1 + 2*gamma2)*k[2]**2)
 
         S = self.H_REDUCED**2 / (2*self.m0) * 2 * np.sqrt(3) * gamma3 * (-k[0]+1j*k[1]) * k[2]
-        R = self.H_REDUCED**2 / (2*self.m0) * np.sqrt(3) * (gamma2 * (k[0]**2 - k[1]**2) - 2*1j*gamma3*k[0]*k[1])
+        R = self.H_REDUCED**2 / (2*self.m0) * np.sqrt(3) * (gamma2 * (k[0]**2 - k[1]**2) - 2j*gamma3*k[0]*k[1])
         D = self.H_REDUCED**2 / (2*self.m0) * np.sqrt(2) * gamma2 * (k[0]**2 + k[1]**2 - 2*k[2]**2)
         return VB, CS, CH, CL, P_plus, P_minus, P_z, S, R, D
 
@@ -58,7 +58,7 @@ class Hamiltonian:
         gamma1 = perovskite.perovskite["gamma_1"] - 1/3 * perovskite.perovskite["Ep"]/perovskite.Eg_with_temperature
         gamma2 = perovskite.perovskite["gamma_2"] - 1/6 * perovskite.perovskite["Ep"]/perovskite.Eg_with_temperature
         gamma3 = perovskite.perovskite["gamma_3"] - 1/6 * perovskite.perovskite["Ep"]/perovskite.Eg_with_temperature
-        gammav = 1 / perovskite.perovskite["mh"] - perovskite.perovskite["Ep"]/3 * (2 / perovskite.Eg_with_temperature + 1 / (perovskite.Eg_with_temperature + perovskite.perovskite["delta"]))
+        gammav = self.m0 / perovskite.perovskite["mh"] - perovskite.perovskite["Ep"]/3 * (2 / perovskite.Eg_with_temperature + 1 / (perovskite.Eg_with_temperature + perovskite.perovskite["delta"]))
 
         P = np.sqrt(perovskite.perovskite["Ep"] * self.H_REDUCED**2 / (2*self.m0))
         VB, CS, CH, CL, P_plus, P_minus, P_z, S, R, D = self.update_for_k(E_VB=Table[0],E_CS=Table[1],E_CH=Table[2],E_CL=Table[3],k=k, P=P, gammav=gammav, gamma1=gamma1, gamma2=gamma2, gamma3=gamma3)
@@ -74,8 +74,10 @@ class Hamiltonian:
         k_values = np.arange(step, percent_range+step, step)
         R_Gamma = [(x/100*Gamma) for x in k_values]
         R_Gamma = np.multiply(R_Gamma, -np.pi/perovskite.perovskite["a"])
+        R_Gamma = np.multiply(R_Gamma, (1/1.8897261246257702)) # unit convert
         R_M = [(x/100*M) for x in k_values]
-        R_M = np.multiply(R_M, -np.pi/perovskite.perovskite["a"])
+        R_M = np.multiply(R_M, -np.pi/perovskite.perovskite["a"]) 
+        R_M = np.multiply(R_M, (1/1.8897261246257702)) # unit convert
 
         for k in reversed(R_Gamma):
             A.append(self.eigenvalues(perovskite=perovskite, k=k, tension=tension))
