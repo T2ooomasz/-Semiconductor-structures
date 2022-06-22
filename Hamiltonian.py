@@ -105,7 +105,7 @@ class Hamiltonian:
         plt.title('')
         #plt.legend()
         plt.grid()
-        plt.savefig(str(f"graphsforGIF/{str(name)}.png"))
+        plt.savefig(str(f"graphs5/{str(name)}.png"))
         plt.clf()
 
         
